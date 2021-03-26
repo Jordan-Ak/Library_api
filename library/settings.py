@@ -158,4 +158,5 @@ OLD_PASSWORD_FIELD_ENABLED = True #So when changing password old password has to
 ACCOUNT_EMAIL_REQUIRED = True #user must verify email before accessing api
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True #Automatically logs users after confirming e-mail.
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
 SITE_ID = 1
