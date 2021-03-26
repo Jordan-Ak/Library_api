@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     #Third party packages
     'rest_framework', #Rest framework
     'rest_framework.authtoken', # For token authentication
+    'dj_rest_auth', #For registration and authentication
 
 
     #My apps
