@@ -43,12 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #Third party packages
-    'rest_framework',
-    'rest_framework.authtoken',
+    'rest_framework', #Rest framework
+    'rest_framework.authtoken', # For token authentication
 
 
     #My apps
-    'users',
+    'users', #app for managing user models or accounts
 ]
 
 MIDDLEWARE = [
@@ -136,10 +136,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser' #Required setting for custom user model to be implemented globally
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [ #Settings used for using session and token authentication
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
