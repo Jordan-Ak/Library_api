@@ -5,7 +5,6 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 # Register your models here.
-
 #Configuration to allow proper viewing in admin site
 CustomUser = get_user_model()
 
