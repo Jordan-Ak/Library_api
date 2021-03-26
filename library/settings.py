@@ -41,11 +41,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', #necessary installation for all-auth
 
     #Third party packages
     'rest_framework', #Rest framework
     'rest_framework.authtoken', # For token authentication
-    'dj_rest_auth', #For registration and authentication
+    'dj_rest_auth', #Authentication
+    'allauth',# For registration
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
 
 
     #My apps
@@ -145,3 +151,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+SITE_ID = 1
