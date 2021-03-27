@@ -153,10 +153,20 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #Sending emails to the console
+
 LOGOUT_ON_PASSWORD_CHANGE = False #Keeps the user logged in after changing password
 OLD_PASSWORD_FIELD_ENABLED = True #So when changing password old password has to be entered.
+
 ACCOUNT_EMAIL_REQUIRED = True #user must verify email before accessing api
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True #Automatically logs users after confirming e-mail.
+
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False #Automatically logs users after confirming e-mail.
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/dj-rest-auth/login'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+LOGIN_REDIRECT_URL='/'
+LOGIN_URL = 'http://localhost:8000/dj-rest-auth/login'
+
 SITE_ID = 1
