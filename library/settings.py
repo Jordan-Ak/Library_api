@@ -46,11 +46,15 @@ INSTALLED_APPS = [
     #Third party packages
     'rest_framework', #Rest framework
     'rest_framework.authtoken', # For token authentication
-    'dj_rest_auth', #Authentication
-    'allauth',# For registration
+    
+    #Third-pary packages for registration and authentication
+    'dj_rest_auth',
+    'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+
+    #Third pary package for password reset, sending to emails
     'django_rest_passwordreset', # To provide password reset endpoints
 
 
