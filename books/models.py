@@ -3,7 +3,10 @@ from django.contrib.auth import get_user_model
 # Create your models here.
 
 class Genre(models.Model):
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length = 50, unique = True)
+
+    def __str__(self):
+        return self.name.title()
 
 class Book(models.Model):
     name = models.CharField(max_length = 150,)
@@ -13,6 +16,7 @@ class Book(models.Model):
     pub_date = models.DateField()
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
     ratings = models.FloatField()
+    isbn = models.CharField(max_length = 13, unique = True, default ='NULL')
     total_qty = models.IntegerField()
     avail_qty = models.IntegerField()
 
