@@ -12,13 +12,13 @@ class Book(models.Model):
     name = models.CharField(max_length = 150,)
     authors = models.CharField(max_length = 100, null = False, blank = False)
     genre = models.ManyToManyField(Genre)
-    publisher = models.CharField(max_length = 100)
+    publisher = models.CharField(max_length = 100, unique = True)
     pub_date = models.DateField()
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
-    ratings = models.FloatField()
+    ratings = models.FloatField(null = True, blank = True)
     isbn = models.CharField(max_length = 13, unique = True, default ='NULL')
-    total_qty = models.IntegerField()
-    avail_qty = models.IntegerField()
+    total_qty = models.IntegerField(null = True, blank = True)
+    avail_qty = models.IntegerField(null = True, blank = True)
 
     def __str__(self):
         return self.name.title()
@@ -36,7 +36,8 @@ class Borrowed(models.Model):
         verbose_name_plural = 'Borrowed'
 
     def __str__(self):
-        return self.name.title()
+        return self.name.name    
+
 
     
 
