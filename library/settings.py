@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 
     #My apps
     'users', #app for managing user models or accounts
+    'books', #app for books
 ]
 
 MIDDLEWARE = [
