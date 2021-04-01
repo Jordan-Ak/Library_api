@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models.signals import pre_save
 from django.contrib.auth import get_user_model
+
+
 # Create your models here.
 
 class Genre(models.Model):
@@ -29,14 +32,16 @@ class Borrowed(models.Model):
     name = models.ForeignKey(Book, on_delete = models.CASCADE,)
     borrowed_date = models.DateTimeField(auto_now_add = True)
     has_returned = models.BooleanField(default = False)
-    returned_date = models.DateTimeField(auto_now = True)
+    returned_date = models.DateTimeField()
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default = '71ba608e-20ed-4954-89e3-942a03e6327d')
 
     class Meta:
         verbose_name_plural = 'Borrowed'
 
     def __str__(self):
-        return self.name.name    
+        return self.name.name.title()  
+
+        
 
 
     
