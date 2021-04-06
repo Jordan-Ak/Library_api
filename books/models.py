@@ -5,6 +5,12 @@ from django.contrib.auth import get_user_model
 
 # Create your models here.
 
+class Author(models.Model):
+    name = models.CharField(max_length = 100)
+
+class Publisher(models.Model):
+    name = models.CharField(max_length = 100)
+
 class Genre(models.Model):
     name = models.CharField(max_length = 50, unique = True)
 
@@ -13,9 +19,9 @@ class Genre(models.Model):
 
 class Book(models.Model):
     name = models.CharField(max_length = 150,)
-    authors = models.CharField(max_length = 100, null = False, blank = False)
+    authors = models.ManyToManyField(Author)
     genre = models.ManyToManyField(Genre)
-    publisher = models.CharField(max_length = 100, unique = True)
+    publisher = models.ForeignKey(Publisher, null = True, blank = True, on_delete = models.CASCADE)
     pub_date = models.DateField()
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
     ratings = models.FloatField(null = True, blank = True)
@@ -40,6 +46,7 @@ class Borrowed(models.Model):
 
     def __str__(self):
         return self.name.name.title()  
+
 
         
 
