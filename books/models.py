@@ -55,8 +55,8 @@ class Book(models.Model):
 class Borrowed(models.Model):
     name = models.ForeignKey(Book, on_delete = models.CASCADE,)
     borrowed_date = models.DateTimeField(auto_now_add = True)
-    #has_returned = models.BooleanField(default = False)
-    returned_date = models.DateTimeField()
+    has_returned = models.BooleanField(default = False)
+    returned_date = models.DateTimeField(null = True, blank = True,)
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')
 
     class Meta:

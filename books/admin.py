@@ -14,8 +14,8 @@ class RateAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Genre,)
-admin.site.register(Book, RateAdmin )
-admin.site.register(Borrowed, DateAdmin)
+admin.site.register(Book, RateAdmin,)
+admin.site.register(Borrowed, DateAdmin,)
 admin.site.register(Rating,)
 admin.site.register(Publisher,)
 admin.site.register(Author,)
