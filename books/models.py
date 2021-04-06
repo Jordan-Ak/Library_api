@@ -36,13 +36,18 @@ class Book(models.Model):
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
     isbn = models.CharField(max_length = 13, unique = True, default ='NULL')
     total_qty = models.IntegerField(null = True, blank = True)
-    avail_qty = models.IntegerField(null = True, blank = True)
+    
 
     @property
     def rating_book(self):
         avg_rating = Rating.objects.filter(book_rated = self.id).aggregate(Avg('rating'))
         return avg_rating['rating__avg']
     
+    @property
+    def avail_qty(self):
+        qty_a = self.total_qty 
+        return qty_a
+
 
     def __str__(self):
         return self.name.title()
@@ -50,9 +55,9 @@ class Book(models.Model):
 class Borrowed(models.Model):
     name = models.ForeignKey(Book, on_delete = models.CASCADE,)
     borrowed_date = models.DateTimeField(auto_now_add = True)
-    has_returned = models.BooleanField(default = False)
+    #has_returned = models.BooleanField(default = False)
     returned_date = models.DateTimeField()
-    who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default = '71ba608e-20ed-4954-89e3-942a03e6327d')
+    who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')
 
     class Meta:
         verbose_name_plural = 'Borrowed'
@@ -71,15 +76,6 @@ class Rating(models.Model):
     def __str__(self):
         return self.book_rated.name.title()
 
-
-#class Returned(models.Model):
-
-
-
-        
-
-
-    
-
-
-
+class Quantities(models.Model):
+    book = models.ForeignKey(Book, on_delete = models.CASCADE)
+    total_qty = models.IntegerField()

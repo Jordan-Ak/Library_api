@@ -9,7 +9,9 @@ class DateAdmin(admin.ModelAdmin):
 
 class RateAdmin(admin.ModelAdmin):
     model = Book
-    readonly_fields = ('rating_book',)
+    readonly_fields = ('rating_book', 'avail_qty',)
+
+
 
 admin.site.register(Genre,)
 admin.site.register(Book, RateAdmin )
