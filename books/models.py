@@ -76,6 +76,17 @@ class Rating(models.Model):
     def __str__(self):
         return self.book_rated.name.title()
 
-class Quantities(models.Model):
+class Quantity(models.Model):
     book = models.ForeignKey(Book, on_delete = models.CASCADE)
     total_qty = models.IntegerField()
+    avail_qty = models.IntegerField(editable = False,)
+
+
+    class Meta:
+        verbose_name_plural = 'Quantities'
+
+    def __str__(self):
+        return self.book.name.title()
+
+    
+        
