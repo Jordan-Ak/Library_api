@@ -34,7 +34,7 @@ class Book(models.Model):
     publisher = models.ForeignKey(Publisher, null = True, blank = True, on_delete = models.CASCADE)
     pub_date = models.DateField()
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
-    isbn = models.CharField(max_length = 13, unique = True, default ='NULL')
+    isbn = models.CharField(max_length = 13, unique = True, null = True, blank = True,)
     total_qty = models.IntegerField(null = True, blank = True)
     
 
