@@ -35,18 +35,23 @@ class Book(models.Model):
     pub_date = models.DateField()
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
     isbn = models.CharField(max_length = 13, unique = True, null = True, blank = True,)
-    total_qty = models.IntegerField(null = True, blank = True)
     
+    
+    @property
+    def total_qty(self):
+        total = Quantity.objects.get(book = self.id)
+        qty_t = total.total_qty
+        return qty_t
 
     @property
     def rating_book(self):
         avg_rating = Rating.objects.filter(book_rated = self.id).aggregate(Avg('rating'))
         return avg_rating['rating__avg']
     
-    @property
-    def avail_qty(self):
-        qty_a = self.total_qty 
-        return qty_a
+    #@property
+    #def avail_qty(self):
+        #qty_a = self.total_qty 
+        #return qty_a
 
 
     def __str__(self):
@@ -67,7 +72,7 @@ class Borrowed(models.Model):
 
 class Rating(models.Model):
     who_rated = models.ForeignKey(get_user_model(), on_delete =models.CASCADE,)
-    book_rated = models.ForeignKey(Book, on_delete = models.CASCADE)
+    book_rated = models.ForeignKey(Book, on_delete = models.CASCADE,)
     rating = models.PositiveIntegerField(validators = [MaxValueValidator(5)])
 
     class Meta:
@@ -77,9 +82,9 @@ class Rating(models.Model):
         return self.book_rated.name.title()
 
 class Quantity(models.Model):
-    book = models.ForeignKey(Book, on_delete = models.CASCADE)
+    book = models.OneToOneField(Book, on_delete = models.CASCADE)
     total_qty = models.IntegerField()
-    avail_qty = models.IntegerField(editable = False,)
+    
 
 
     class Meta:
