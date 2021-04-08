@@ -22,15 +22,16 @@ def same_borrowed(sender, instance, *args, **kwargs):
     current = instance
     same_borrowed = Borrowed.objects.filter(has_returned = False).filter(
                                                 who_borrowed = current.who_borrowed).filter(
-                                                name = current.name   
-                                                )
-    if len(same_borrowed) == 1:
+                                                name = current.name).exclude(id = current.id)
+    if len(same_borrowed) == 1 and current.has_returned == False:
             raise Exception("This user cannot borrow the same book!")
 
 @receiver(pre_save, sender = Borrowed,)
 def num_borrowed(sender, instance, *args, **kwargs):
     current = instance
-    borrowed_person = Borrowed.objects.filter(who_borrowed = current.who_borrowed)
+    borrowed_person = Borrowed.objects.filter(
+                        who_borrowed = current.who_borrowed).filter(
+                            has_returned = False).exclude(id = current.id)
     num_borrowed = len(borrowed_person)
     
     if num_borrowed == 3 and current.has_returned == False:
