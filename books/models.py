@@ -122,6 +122,16 @@ class Quantity(models.Model):
     def __str__(self):
         return self.book.name.title()
 
+class Person_Quantity_const(models.Model):
+    who = models.ForeignKey(get_user_model(), on_delete = models.CASCADE,)
+
+    def quantity_borrowed(self):
+        borrowed_person = Borrowed.objects.filter(who_borrowed = self.who)
+        num_borrowed = len(borrowed_person)
+        return num_borrowed
+
+
+
     
 #class Total_Quantity(models.Model):
 

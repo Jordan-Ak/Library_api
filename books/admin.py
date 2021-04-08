@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Genre, Book, Borrowed, Rating, Publisher, Author, Quantity
+from .models import (Genre, Book, Borrowed, 
+                     Rating, Publisher, Author, 
+                     Quantity, Person_Quantity_const)
 
 # Register your models here.
 
@@ -15,7 +17,9 @@ class QuantityAdmin(admin.ModelAdmin):
     model = Quantity
     readonly_fields = ('avail_qty',)
 
-
+class PersonQuantityAdmin(admin.ModelAdmin):
+    model = Person_Quantity_const
+    readonly_fields = ('quantity_borrowed',)
 
 
 
@@ -29,4 +33,5 @@ admin.site.register(Rating,)
 admin.site.register(Publisher,)
 admin.site.register(Author,)
 admin.site.register(Quantity, QuantityAdmin)
+admin.site.register(Person_Quantity_const, PersonQuantityAdmin)
 
