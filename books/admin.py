@@ -11,6 +11,10 @@ class RateAdmin(admin.ModelAdmin):
     model = Book
     readonly_fields = ('rating_book', 'total_qty',)
 
+class QuantityAdmin(admin.ModelAdmin):
+    model = Quantity
+    readonly_fields = ('avail_qty',)
+
 
 
 
@@ -22,4 +26,4 @@ admin.site.register(Borrowed, DateAdmin,)
 admin.site.register(Rating,)
 admin.site.register(Publisher,)
 admin.site.register(Author,)
-admin.site.register(Quantity,)
+admin.site.register(Quantity, QuantityAdmin)

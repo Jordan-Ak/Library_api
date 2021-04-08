@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.signals import pre_save
 from django.contrib.auth import get_user_model
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.core.validators import MaxValueValidator
 
 
@@ -64,6 +64,10 @@ class Borrowed(models.Model):
     returned_date = models.DateTimeField(null = True, blank = True,)
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')
 
+#def total_qty_borrowed(self):
+        #taken_qty = Borrowed.objects.filter(has_returned__exact = False)
+        #return(len(taken_qty))    
+
     class Meta:
         verbose_name_plural = 'Borrowed'
 
@@ -84,6 +88,13 @@ class Rating(models.Model):
 class Quantity(models.Model):
     book = models.OneToOneField(Book, on_delete = models.CASCADE)
     total_qty = models.IntegerField()
+    
+    @property
+    def avail_qty(self):
+        taken = Borrowed.objects.filter(has_returned__exact = False).filter(name = self.book)
+        taken_qty = (len(taken))
+        qty = self.total_qty - taken_qty
+        return qty 
     
 
 
