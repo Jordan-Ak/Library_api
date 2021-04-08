@@ -76,6 +76,7 @@ class Borrowed(models.Model):
 
     class Meta:
         verbose_name_plural = 'Borrowed'
+        unique_together = ('who_borrowed', 'name',)
 
     def __str__(self):
         return self.name.name.title()
