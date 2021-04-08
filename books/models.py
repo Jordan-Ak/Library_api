@@ -70,13 +70,24 @@ class Borrowed(models.Model):
     returned_date = models.DateTimeField(null = True, blank = True,)
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')
 
+    
+            
 #def total_qty_borrowed(self):
         #taken_qty = Borrowed.objects.filter(has_returned__exact = False)
         #return(len(taken_qty))    
+    
+    #def borrowing_constraint(self):
+        #borrowed_person = Borrowed.objects.filter(who_borrowed = self.id)
+        #num_borrowed = len(borrowed_person)
+        #return num_borrowed
 
     class Meta:
         verbose_name_plural = 'Borrowed'
         unique_together = ('who_borrowed', 'name',)
+    
+        #constraints = [
+         #   models.CheckConstraint(check= models.Q(borrowing_constrain__lte= 3),name = 'borrowing_limit'),
+        #]
 
     def __str__(self):
         return self.name.name.title()
@@ -112,4 +123,20 @@ class Quantity(models.Model):
         return self.book.name.title()
 
     
+#class Total_Quantity(models.Model):
+
+   # def total_qty_borrowed(self):
+     #   taken_qty = Borrowed.objects.filter(has_returned__exact = False)
+      #  return(len(taken_qty))
         
+    #def total_qty_books(self):
+     #   books = Quantity.objects.all()
+
+      #  for i in range (len(books)):
+           # total =+ Quantity.objects.get(id = i).total_qty
+       #     return total
+
+    #class Meta:
+     #   verbose_name_plural = 'Total Quantities'
+    
+    
