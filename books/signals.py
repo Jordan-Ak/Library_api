@@ -17,13 +17,7 @@ def modify_has_returned_date(sender, instance, **kwargs):
         if current.has_returned != previous.has_returned:
             instance.returned_date = timezone.now()
 
-@receiver(pre_save, sender = Borrowed,)
-def borrowing_limit(sender, instance, **kwargs):
-    current = instance
-    borrowed_person = Borrowed.objects.filter(who_borrowed = current.who_borrowed)
-    num_borrowed = len(borrowed_person)
-    if num_borrowed > 3:
-        raise Exception('Cannot borrow more than limit')
+
 
 
         
