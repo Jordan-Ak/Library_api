@@ -6,7 +6,7 @@ from django.db.models import F
 from .models import Borrowed, Quantity_Borrowed, Quantity
 from django.utils import timezone
 
-@receiver(pre_save, sender= Borrowed,)
+@receiver(pre_save, sender= Borrowed,)    #Signal for modifying returned date when user returns book
 def modify_has_returned_date(sender, instance, **kwargs):
     current = instance
     try:
@@ -17,16 +17,18 @@ def modify_has_returned_date(sender, instance, **kwargs):
         if current.has_returned != previous.has_returned:
             instance.returned_date = timezone.now()
 
-@receiver(pre_save, sender = Borrowed,)
+@receiver(pre_save, sender = Borrowed,) #Signal that constraints a user not to borrow multiple copies of the same book
 def same_borrowed(sender, instance, *args, **kwargs):
     current = instance
     same_borrowed = Borrowed.objects.filter(has_returned = False).filter(
                                                 who_borrowed = current.who_borrowed).filter(
                                                 name = current.name).exclude(id = current.id)
+    #same_borrowed filters has returned, person borrowing, name of book and excludes that instance
+    
     if len(same_borrowed) == 1 and current.has_returned == False:
             raise Exception("This user cannot borrow the same book!")
 
-@receiver(pre_save, sender = Borrowed,)
+@receiver(pre_save, sender = Borrowed,)     #Signal that constrains a user not to borrow more than 3 books
 def num_borrowed(sender, instance, *args, **kwargs):
     current = instance
     borrowed_person = Borrowed.objects.filter(
@@ -37,7 +39,7 @@ def num_borrowed(sender, instance, *args, **kwargs):
     if num_borrowed == 3 and current.has_returned == False:
         raise Exception("Current user cannot borrow more than 3 books!")
 
-@receiver(pre_save, sender = Borrowed,)
+@receiver(pre_save, sender = Borrowed,)    #A signal that signals if a book is out of stock at the moment.
 def finished_book(sender, instance, *args, **kwargs):
     current = instance
     qty = Quantity.objects.get(book = current.name)
