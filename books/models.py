@@ -44,6 +44,12 @@ class Book(models.Model):
         return qty_t
 
     @property
+    def avail_qty(self):
+        qty = Quantity.objects.get(book = self.id)
+        qty_a = qty.avail_qty
+        return qty_a
+
+    @property
     def rating_book(self):
         avg_rating = Rating.objects.filter(book_rated = self.id).aggregate(Avg('rating'))
         return avg_rating['rating__avg']
