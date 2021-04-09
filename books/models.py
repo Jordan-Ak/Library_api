@@ -106,22 +106,32 @@ class Quantity(models.Model):     #Quantity of books for a particular book
 class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
     who = models.ForeignKey(get_user_model(), on_delete = models.CASCADE,)
 
-    @property #This is code to determine which books this user borrowed and time left for return
-    def books_borrowed_and_time_left(self):
-        borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
-        books = []
-        borrowed_time = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
+    
+    @property  #This code is to generate the time left for books borrowed
+    def time_left(self):
         left_time = []
-        book_time_dict = {}
-        display = []
+        borrowed_time = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         
         for time in borrowed_time: #Making a list of time left to return books
             time_format = ((time.borrowed_date + timedelta(days =14) - datetime.now(timezone.utc)))
             format_time = convert_timedelta(time_format)
             left_time.append(format_time)
+        return left_time
+    
+    @property #This code is to generate the books which have been borrowed to link with time_left
+    def books_borrowed(self):
+        borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
+        return borrowed_person
+    
+    @property #This is code to determine which books this user borrowed and time left for return
+    def books_borrowed_and_time_left(self):
+        borrowed_person = self.books_borrowed
+
+        left_time = self.time_left  #Using values from time_left DRY(Don't repeat yourself :() I just did)
+        book_time_dict = {}
+        display = []
         
         for i in range (0, len(borrowed_person)):
-            #for time in left_time:
             book_time_dict[borrowed_person[i].name.name] = left_time[i] #Making a dictionary of books and time left
         
         for i in book_time_dict:
@@ -129,7 +139,8 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         
         return ', \n'.join(map(str,display)) #'Display values in list in readable format'
 
-   
+    
+
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):
         borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)

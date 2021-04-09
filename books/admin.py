@@ -19,7 +19,7 @@ class QuantityAdmin(admin.ModelAdmin):
 
 class PersonQuantityAdmin(admin.ModelAdmin):
     model = Quantity_Borrowed
-    readonly_fields = ('books_borrowed_and_time_left','quantity_borrowed',)
+    readonly_fields = ('books_borrowed_and_time_left','quantity_borrowed','time_left',)
 
 
 

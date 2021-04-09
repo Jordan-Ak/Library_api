@@ -48,6 +48,9 @@ def finished_book(sender, instance, *args, **kwargs):
     if qty_a == 0 and current.has_returned == False:
        raise Exception("That book has finished!")
 
-        
+@receiver(pre_save, sender = Quantity_Borrowed,)
+def late_return(sender, instance, *args, **kwargs):
+    current = instance
+    borrow_due = Quantity_Borrowed.objects.filter()   
         
         
