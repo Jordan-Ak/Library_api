@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta, timezone
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models import Avg
+from django.db.models import Avg, F
 from django.core.validators import MaxValueValidator, MinLengthValidator
  
 
@@ -111,12 +112,24 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         for borrowed_book in borrowed_person:
             books.append(borrowed_book.name.name.title())
         return ','.join(map(str,books))  #Returns a list of books separated by a comma.
+    
+    @property #This code is to ascertain time limit for book returned
+    def time_left(self):
+        borrowed_time = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
+        left_time = []
+        for time in borrowed_time:
+            left_time.append((time.borrowed_date + timedelta(days =14)- datetime.now(timezone.utc)))    
+            
+            #left_time.append(time.borrowed_date)
+        return str(left_time)
+
 
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):
         borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         num_borrowed = len(borrowed_person)
         return num_borrowed
+    
     
     class Meta:
         verbose_name_plural = 'Quantity_Borrowed'
