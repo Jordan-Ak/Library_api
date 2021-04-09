@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models import Avg
 from django.core.validators import MaxValueValidator, MinLengthValidator
-from .ad_variables import convert_timedelta, days_to_return
+from .ad_variables import convert_timedelta, days_to_return, rating_number_max
  
 
 # Create your models here.
@@ -78,7 +78,7 @@ class Borrowed(models.Model):    #Model for users borrowing and returning
 class Rating(models.Model):     #Rating for books
     who_rated = models.ForeignKey(get_user_model(), on_delete =models.CASCADE,)
     book_rated = models.ForeignKey(Book, on_delete = models.CASCADE,)
-    rating = models.PositiveIntegerField(validators = [MaxValueValidator(5)])  #Rating shouldn't be higher than 5
+    rating = models.PositiveIntegerField(validators = [MaxValueValidator(rating_number_max)])  #Rating shouldn't be higher than 5
 
     class Meta: #This constraint restricts users to have only one rating per book
         unique_together = ('who_rated', 'book_rated',)

@@ -9,3 +9,4 @@ def convert_timedelta(duration):
     return time
 
 days_to_return = 14
+rating_number_max = 5
