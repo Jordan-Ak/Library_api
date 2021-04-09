@@ -1,10 +1,11 @@
+from datetime import datetime, timedelta, timezone
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.db.models import IntegerField
 from django.db.models import F
-from .models import Borrowed, Quantity_Borrowed, Quantity
-from django.utils import timezone
+from .models import Borrowed, Quantity_Borrowed, Quantity_Book
+from .ad_variables import days_to_return
 
 @receiver(pre_save, sender= Borrowed,)    #Signal for modifying returned date when user returns book
 def modify_has_returned_date(sender, instance, **kwargs):
@@ -42,15 +43,22 @@ def num_borrowed(sender, instance, *args, **kwargs):
 @receiver(pre_save, sender = Borrowed,)    #A signal that signals if a book is out of stock at the moment.
 def finished_book(sender, instance, *args, **kwargs):
     current = instance
-    qty = Quantity.objects.get(book = current.name)
+    qty = Quantity_Book.objects.get(book = current.name)
     qty_a = qty.avail_qty
    
     if qty_a == 0 and current.has_returned == False:
        raise Exception("That book has finished!")
 
-@receiver(pre_save, sender = Quantity_Borrowed,)
-def late_return(sender, instance, *args, **kwargs):
-    current = instance
-    borrow_due = Quantity_Borrowed.objects.filter()   
+
+###Saving this code
+#@receiver(pre_save, sender = Quantity_Borrowed,)
+#def late_return(sender, instance, *args, **kwargs):
+    #current = instance
+    #borrowed_time = Borrowed.objects.filter(who_borrowed = current.who).filter(has_returned = False)
+    #for time in borrowed_time: #Making a list of time left to return books
+        #time_format = ((time.borrowed_date + timedelta(
+         #                           days =days_to_return) - datetime.now(timezone.utc)))
+        #if time_format.seconds < 0:
+           # raise Exception("TTTTT")
         
         

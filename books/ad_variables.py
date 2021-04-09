@@ -7,3 +7,5 @@ def convert_timedelta(duration):
     seconds = (seconds % 60)
     time = (str(days) + 'days, ' +str(hours) + 'hrs, ' + str(minutes) + 'min')
     return time
+
+days_to_return = 14

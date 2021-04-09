@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta, timezone
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models import Avg, F
+from django.db.models import Avg
 from django.core.validators import MaxValueValidator, MinLengthValidator
-from .ad_variables import convert_timedelta
+from .ad_variables import convert_timedelta, days_to_return
  
 
 # Create your models here.
@@ -86,7 +86,7 @@ class Rating(models.Model):     #Rating for books
     def __str__(self):
         return self.book_rated.name.title() + ', ' + self.who_rated.username
 
-class Quantity(models.Model):     #Quantity of books for a particular book
+class Quantity_Book(models.Model):     #Quantity of books for a particular book
     book = models.OneToOneField(Book, on_delete = models.CASCADE)  #One book to one quantity
     total_qty = models.PositiveIntegerField()
     
@@ -113,7 +113,9 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         borrowed_time = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         
         for time in borrowed_time: #Making a list of time left to return books
-            time_format = ((time.borrowed_date + timedelta(days =14) - datetime.now(timezone.utc)))
+            time_format = ((time.borrowed_date + timedelta(
+                                    days =days_to_return) - datetime.now(timezone.utc)))
+            
             format_time = convert_timedelta(time_format)
             left_time.append(format_time)
         return left_time
@@ -139,7 +141,6 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         
         return ', \n'.join(map(str,display)) #'Display values in list in readable format'
 
-    
 
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):
