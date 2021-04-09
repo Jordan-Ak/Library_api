@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models import Avg, F
 from django.core.validators import MaxValueValidator, MinLengthValidator
+from .ad_variables import convert_timedelta
  
 
 # Create your models here.
@@ -120,8 +121,8 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         for time in borrowed_time:
             left_time.append((time.borrowed_date + timedelta(days =14)- datetime.now(timezone.utc)))    
             
-            #left_time.append(time.borrowed_date)
-        return str(left_time)
+        format_left_time = convert_timedelta(left_time)
+        return str(format_left_time)
 
 
     @property #This is code to determine how many books that has been borrowed by a user
