@@ -106,31 +106,35 @@ class Quantity(models.Model):     #Quantity of books for a particular book
 class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
     who = models.ForeignKey(get_user_model(), on_delete = models.CASCADE,)
 
-    @property #This is code to determine which books this user borrowed
-    def books_borrowed(self):
+    @property #This is code to determine which books this user borrowed and time left for return
+    def books_borrowed_and_time_left(self):
         borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         books = []
-        for borrowed_book in borrowed_person:
-            books.append(borrowed_book.name.name.title())
-        return ','.join(map(str,books))  #Returns a list of books separated by a comma.
-    
-    @property #This code is to ascertain time limit for book returned
-    def time_left(self):
         borrowed_time = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         left_time = []
-        for time in borrowed_time:
-            left_time.append((time.borrowed_date + timedelta(days =14)- datetime.now(timezone.utc)))    
-            
-        format_left_time = convert_timedelta(left_time)
-        return str(format_left_time)
+        book_time_dict = {}
+        display = []
+        
+        for time in borrowed_time: #Making a list of time left to return books
+            time_format = ((time.borrowed_date + timedelta(days =14) - datetime.now(timezone.utc)))
+            format_time = convert_timedelta(time_format)
+            left_time.append(format_time)
+        
+        for i in range (0, len(borrowed_person)):
+            #for time in left_time:
+            book_time_dict[borrowed_person[i].name.name] = left_time[i] #Making a dictionary of books and time left
+        
+        for i in book_time_dict:
+            display.append(i + ':' +  book_time_dict[i]) #'Making a dictionary into a list'
+        
+        return ', \n'.join(map(str,display)) #'Display values in list in readable format'
 
-
+   
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):
         borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         num_borrowed = len(borrowed_person)
         return num_borrowed
-    
     
     class Meta:
         verbose_name_plural = 'Quantity_Borrowed'
