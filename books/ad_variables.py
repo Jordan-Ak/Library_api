@@ -1,3 +1,4 @@
+#Admin variables
 from datetime import datetime, timedelta, timezone
 
 def convert_timedelta(duration):
