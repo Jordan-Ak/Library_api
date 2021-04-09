@@ -104,9 +104,17 @@ class Quantity(models.Model):     #Quantity of books for a particular book
 class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
     who = models.ForeignKey(get_user_model(), on_delete = models.CASCADE,)
 
+    @property #This is code to determine which books this user borrowed
+    def books_borrowed(self):
+        borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
+        books = []
+        for borrowed_book in borrowed_person:
+            books.append(borrowed_book.name.name.title())
+        return ','.join(map(str,books))  #Returns a list of books separated by a comma.
+
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):
-        borrowed_person = Borrowed.objects.filter(who_borrowed = self.who)
+        borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
         num_borrowed = len(borrowed_person)
         return num_borrowed
     
