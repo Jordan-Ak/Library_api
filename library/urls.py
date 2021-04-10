@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from allauth.account.views import ConfirmEmailView, EmailVerificationSentView
 from users.views import CustomPasswordTokenVerificationView
-
+from books.api import router
 
 
 
@@ -41,6 +41,9 @@ urlpatterns = [
 
     #To enable quick login and logout restframework
     path('api-auth', include('rest_framework.urls')),
+
+    #Books app related urls
+    path('api/v1/', include(router.urls)),
     
     
 ]
