@@ -6,15 +6,16 @@ from . import serializers
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = get_user_model().objects.all()
+    #queryset = get_user_model().objects.all()
     serializer_class = serializers.UserSerializer
     
-    #def get_queryset(self):
-        #if self.request.user.is_staff:
-         #   queryset = get_user_model().objects.all()
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = get_user_model().objects.all()
         
-        #else:
-         #   queryset = get_user_model().filter(id = self.request.user.id)
+        else:
+            queryset = get_user_model().objects.filter(id = self.request.user.id)
         
-        #return queryset
+        return queryset
     
