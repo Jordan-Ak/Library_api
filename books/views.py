@@ -7,17 +7,20 @@ from . import serializers
 
 # Create your views here.
 
-class UserViewSet(#mixins.CreateModelMixin, 
+class UserViewSet(#mixins.CreateModelMixin,   #No post method but the rest are avaialble
                    mixins.RetrieveModelMixin, 
                    mixins.UpdateModelMixin,
                    mixins.DestroyModelMixin,
                    mixins.ListModelMixin,
-                   viewsets.GenericViewSet):
+                   viewsets.GenericViewSet):  
     
+    #Project-level permissions apply here, authenticated only
     serializer_class = serializers.UserSerializer
     lookup_field = 'username'
 
-    def get_queryset(self):
+    def get_queryset(self): #Query set filters according to being a staff, staff gets all users.
+                            #User gets only himself
+
         if self.request.user.is_staff:
             queryset = get_user_model().objects.all()
         
