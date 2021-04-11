@@ -5,6 +5,10 @@ from .models import (Genre, Book, Borrowed,
 
 # Register your models here.
 
+class AuthorAdmin(admin.ModelAdmin):
+    model = Author
+    readonly_fields = ('books',)
+
 class DateAdmin(admin.ModelAdmin):
     model = Borrowed
     readonly_fields = ('borrowed_date','returned_date')
@@ -26,7 +30,7 @@ admin.site.register(Book, RateAdmin,)
 admin.site.register(Borrowed, DateAdmin,)
 admin.site.register(Rating,)
 admin.site.register(Publisher,)
-admin.site.register(Author,)
+admin.site.register(Author, AuthorAdmin)
 admin.site.register(Quantity_Book, QuantityAdmin)
 admin.site.register(Quantity_Borrowed, PersonQuantityAdmin)
 

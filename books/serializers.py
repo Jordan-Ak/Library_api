@@ -13,10 +13,13 @@ class AuthorListSerializer(serializers.ModelSerializer):
         fields = ('name',)
 
 class AuthorDetailSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = models.Author
+        fields = ('name','books',)
 
-""""
+
+"""
 class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Publisher

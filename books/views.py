@@ -35,7 +35,11 @@ class UserViewSet(#mixins.CreateModelMixin,   #No post method but the rest are a
 class AuthorViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     
     queryset = models.Author.objects.all()
-    serializer_class = serializers.AuthorListSerializer
-    serializer_action_classes = {'detail': serializers.AuthorDetailSerializer,}
+    serializer_class = serializers.AuthorDetailSerializer
+    serializer_action_classes = {'list': serializers.AuthorListSerializer,}
     permission_classes = [IsAdminOrReadOnly,]
+    
+    
+    
+        
     

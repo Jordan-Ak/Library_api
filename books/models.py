@@ -11,6 +11,11 @@ from .ad_variables import convert_timedelta, days_to_return, rating_number_max
 class Author(models.Model): #Author of books
     name = models.CharField(max_length = 100)
 
+    @property
+    def books(self):
+        book = Book.objects.filter(authors = self.id)
+        return ', '.join(map(str,book))
+
     def __str__(self):
         return self.name.title()
 
@@ -44,13 +49,13 @@ class Book(models.Model):
     
     @property # Code to get total quantity of books for a particular book # reference from a class futher down
     def total_qty(self):
-        total = Quantity.objects.get(book = self.id)
+        total = Quantity_Book.objects.get(book = self.id)
         qty_t = total.total_qty
         return qty_t
 
     @property #Code to obtain available quantity of books remaining after books have been borrowed
     def avail_qty(self):
-        qty = Quantity.objects.get(book = self.id)
+        qty = Quantity_Book.objects.get(book = self.id)
         qty_a = qty.avail_qty
         return qty_a
 
