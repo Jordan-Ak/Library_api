@@ -7,15 +7,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('id','username','email','date_joined',)
 
-"""class AuthorListSerializer(serializers.ModelSerializer):
+class AuthorListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Author
-        fields = ('name')
+        fields = ('name',)
 
 class AuthorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Author
 
+""""
 class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Publisher
