@@ -154,8 +154,8 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         for i in book_time_dict:
             display.append(i + ':' +  book_time_dict[i]) #'Making a dictionary into a list'
         
-        return ', \n'.join(map(str,display)) #'Display values in list in readable format'
-
+        return ',  '.join(map(str,display)) #'Display values in list in readable format'
+                #', \n'.join(map(str,display)) #To add a new line in admin
 
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):

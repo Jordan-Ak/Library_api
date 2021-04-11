@@ -76,3 +76,9 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Rating
         fields = ('book_rated', 'who_rated', 'rating',)
+
+class QuantityBorrowedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Quantity_Borrowed
+        fields = ('books_borrowed_and_time_left','quantity_borrowed',)

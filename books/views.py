@@ -85,7 +85,19 @@ class RatingViewSet(viewsets.ModelViewSet):
         else:
             queryset = models.Rating.objects.filter(who_rated = self.request.user.id)
         
-        return queryset        
+        return queryset 
+
+class QuantityTimeViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.QuantityBorrowedSerializer
+
+    def get_queryset(self):  #Filter ratings so user sees only his own rating.
+        if self.request.user.is_staff:
+            queryset = models.Quantity_Borrowed.objects.all()
+        
+        else:
+            queryset = models.Quantity_Borrowed.objects.filter(who= self.request.user.id)
+        
+        return queryset
     
     
         
