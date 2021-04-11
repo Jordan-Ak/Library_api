@@ -37,28 +37,28 @@ class AuthorViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     queryset = models.Author.objects.all()
     serializer_class = serializers.AuthorDetailSerializer
     serializer_action_classes = {'list': serializers.AuthorListSerializer,}
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly,permissions.IsAuthenticated,]
 
 class PublisherViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     queryset = models.Publisher.objects.all()
     serializer_class = serializers.PublisherDetailSerializer
     serializer_action_classes = {'list': serializers.PublisherListSerializer,}
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
 class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     queryset = models.Genre.objects.all()
     serializer_class = serializers.GenreDetailSerializer
     serializer_action_classes = {'list': serializers.GenreListSerializer,}
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
 class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookDetailSerializer
     serializer_action_classes = {'list': serializers.BookListSerializer}
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
     
 
     

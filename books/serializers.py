@@ -43,14 +43,19 @@ class GenreDetailSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    #authors = serializers.ReadOnlyField(many = True, source ='authors.name')
-    #genre = serializers.ReadOnlyField(source = 'genre.name')
-    publisher = serializers.ReadOnlyField(source = 'publisher.name')
+    authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
+    genre = serializers.StringRelatedField(many = True,)
+   
+   
     class Meta:
         model = models.Book
-        fields = ('name','publisher','authors','rating', 'genre')
+        fields = ('name','authors','rating', 'genre')
 
 class BookDetailSerializer(serializers.ModelSerializer):
+    publisher = serializers.ReadOnlyField(source = 'publisher.name') #To display publisher name instead of id
+    authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
+    genre = serializers.StringRelatedField(many = True,)
+    
     class Meta:
         model = models.Book
         fields = ('name', 'authors', 'rating','genre',
