@@ -52,6 +52,13 @@ class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_class = serializers.GenreDetailSerializer
     serializer_action_classes = {'list': serializers.GenreListSerializer,}
     permission_classes = [IsAdminOrReadOnly,]
+
+class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
+
+    queryset = models.Book.objects.all()
+    serializer_class = serializers.BookDetailSerializer
+    serializer_action_classes = {'list': serializers.BookListSerializer}
+    permission_classes = [IsAdminOrReadOnly,]
     
 
     

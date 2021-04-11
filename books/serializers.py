@@ -42,9 +42,17 @@ class GenreDetailSerializer(serializers.ModelSerializer):
         fields = ('name', 'books',)
 
 
-"""
-class BookSerializer(serializers.ModelSerializer):
+class BookListSerializer(serializers.ModelSerializer):
+    #authors = serializers.ReadOnlyField(many = True, source ='authors.name')
+    #genre = serializers.ReadOnlyField(source = 'genre.name')
+    publisher = serializers.ReadOnlyField(source = 'publisher.name')
     class Meta:
         model = models.Book
-        fields = ()
-"""
+        fields = ('name','publisher','authors','rating', 'genre')
+
+class BookDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Book
+        fields = ('name', 'authors', 'rating','genre',
+                  'publisher', 'total_qty', 'avail_qty',
+                  'pub_date','isbn','price',)

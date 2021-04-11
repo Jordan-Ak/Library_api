@@ -23,7 +23,7 @@ class DateAdmin(admin.ModelAdmin):
 
 class RateAdmin(admin.ModelAdmin):
     model = Book
-    readonly_fields = ('rating_book', 'total_qty', 'avail_qty',)
+    readonly_fields = ('rating', 'total_qty', 'avail_qty',)
 
 class QuantityAdmin(admin.ModelAdmin):
     model = Quantity_Book

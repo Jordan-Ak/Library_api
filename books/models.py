@@ -45,7 +45,7 @@ class Genre(models.Model): #Genre of books
 
 class Book(models.Model):
     name = models.CharField(max_length = 150,)   #Name of books
-    authors = models.ManyToManyField(Author)     #Many to many because multiple books can have multiple authors
+    authors = models.ManyToManyField(Author,)     #Many to many because multiple books can have multiple authors
     genre = models.ManyToManyField(Genre)       #Many to many because multiple genres can appear on multiple books
     publisher = models.ForeignKey(Publisher, on_delete = models.SET_DEFAULT, default = '2') 
     #A book should have a publisher will include a none field for books without publishers
@@ -70,7 +70,7 @@ class Book(models.Model):
         return qty_a
 
     @property #Code to determine average rating from users
-    def rating_book(self):
+    def rating(self):
         avg_rating = Rating.objects.filter(book_rated = self.id).aggregate(Avg('rating'))
         return avg_rating['rating__avg']
     
