@@ -19,16 +19,30 @@ class AuthorDetailSerializer(serializers.ModelSerializer):
         fields = ('name','books',)
 
 
-"""
-class PublisherSerializer(serializers.ModelSerializer):
+
+class PublisherListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Publisher
+        fields = ('name',)
 
-class GenreSerializer(serializers.ModelSerializer):
+class PublisherDetailSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = models.Publisher
+        fields = ('name', 'books')
+
+class GenreListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Genre
-        fields = ('name')
+        fields = ('name',)
 
+class GenreDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Genre
+        fields = ('name', 'books',)
+
+
+"""
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book

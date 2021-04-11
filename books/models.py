@@ -11,7 +11,7 @@ from .ad_variables import convert_timedelta, days_to_return, rating_number_max
 class Author(models.Model): #Author of books
     name = models.CharField(max_length = 100)
 
-    @property
+    @property    # This is code to get the books linked to an author 
     def books(self):
         book = Book.objects.filter(authors = self.id)
         return ', '.join(map(str,book))
@@ -20,13 +20,23 @@ class Author(models.Model): #Author of books
         return self.name.title()
 
 class Publisher(models.Model): #Publihsers of books
-    name = models.CharField(max_length = 100)
+    name = models.CharField(max_length = 100, unique = True,)
+
+    @property
+    def books(self):
+        book = Book.objects.filter(publisher = self.id)
+        return ', '.join(map(str,book))
 
     def __str__(self):
         return self.name.title()
 
 class Genre(models.Model): #Genre of books
     name = models.CharField(max_length = 50, unique = True)
+
+    @property
+    def books(self):
+        book = Book.objects.filter(genre = self.id)
+        return ', '.join(map(str,book))
 
     def __str__(self):
         return self.name.title()
@@ -37,7 +47,7 @@ class Book(models.Model):
     name = models.CharField(max_length = 150,)   #Name of books
     authors = models.ManyToManyField(Author)     #Many to many because multiple books can have multiple authors
     genre = models.ManyToManyField(Genre)       #Many to many because multiple genres can appear on multiple books
-    publisher = models.ForeignKey(Publisher, null = True, blank = True, on_delete = models.CASCADE) 
+    publisher = models.ForeignKey(Publisher, on_delete = models.SET_DEFAULT, default = '2') 
     #A book should have a publisher will include a none field for books without publishers
     
     pub_date = models.DateField()

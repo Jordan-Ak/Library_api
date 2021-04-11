@@ -9,6 +9,14 @@ class AuthorAdmin(admin.ModelAdmin):
     model = Author
     readonly_fields = ('books',)
 
+class PublisherAdmin(admin.ModelAdmin):
+    model = Publisher
+    readonly_fields = ('books',)
+
+class GenreAdmin(admin.ModelAdmin):
+    model = Genre
+    readonly_fields = ('books',)
+
 class DateAdmin(admin.ModelAdmin):
     model = Borrowed
     readonly_fields = ('borrowed_date','returned_date')
@@ -25,11 +33,11 @@ class PersonQuantityAdmin(admin.ModelAdmin):
     model = Quantity_Borrowed
     readonly_fields = ('books_borrowed_and_time_left','quantity_borrowed',)
 
-admin.site.register(Genre,)
+admin.site.register(Genre, GenreAdmin)
 admin.site.register(Book, RateAdmin,)
 admin.site.register(Borrowed, DateAdmin,)
 admin.site.register(Rating,)
-admin.site.register(Publisher,)
+admin.site.register(Publisher, PublisherAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Quantity_Book, QuantityAdmin)
 admin.site.register(Quantity_Borrowed, PersonQuantityAdmin)

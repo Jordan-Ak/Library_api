@@ -38,7 +38,22 @@ class AuthorViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_class = serializers.AuthorDetailSerializer
     serializer_action_classes = {'list': serializers.AuthorListSerializer,}
     permission_classes = [IsAdminOrReadOnly,]
+
+class PublisherViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
+
+    queryset = models.Publisher.objects.all()
+    serializer_class = serializers.PublisherDetailSerializer
+    serializer_action_classes = {'list': serializers.PublisherListSerializer,}
+    permission_classes = [IsAdminOrReadOnly,]
+
+class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
+
+    queryset = models.Genre.objects.all()
+    serializer_class = serializers.GenreDetailSerializer
+    serializer_action_classes = {'list': serializers.GenreListSerializer,}
+    permission_classes = [IsAdminOrReadOnly,]
     
+
     
     
         
