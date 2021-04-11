@@ -55,9 +55,16 @@ class BookDetailSerializer(serializers.ModelSerializer):
     publisher = serializers.ReadOnlyField(source = 'publisher.name') #To display publisher name instead of id
     authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
     genre = serializers.StringRelatedField(many = True,)
-    
+
     class Meta:
         model = models.Book
         fields = ('name', 'authors', 'rating','genre',
                   'publisher', 'total_qty', 'avail_qty',
                   'pub_date','isbn','price',)
+
+class BorrowedSerializer(serializers.ModelSerializer):
+    who_borrowed = serializers.ReadOnlyField(source = 'who_borrowed.username')
+    
+    class Meta:
+        model = models.Borrowed
+        fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)

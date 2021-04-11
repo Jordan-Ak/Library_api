@@ -59,7 +59,21 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_class = serializers.BookDetailSerializer
     serializer_action_classes = {'list': serializers.BookListSerializer}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
-    
+
+class BorrowedViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
+    serializer_class = serializers.BorrowedSerializer
+    permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
+
+    def get_queryset(self): #Query set filters according to being a staff, staff gets all users.
+                            #User gets only himself
+
+        if self.request.user.is_staff:
+            queryset = models.Borrowed.objects.all()
+        
+        else:
+            queryset = models.Borrowed.objects.filter(who_borrowed = self.request.user.id)
+        
+        return queryset    
 
     
     
