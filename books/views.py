@@ -60,7 +60,7 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.BookListSerializer}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-class BorrowedViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
+class BorrowedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BorrowedSerializer
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
@@ -75,6 +75,17 @@ class BorrowedViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         
         return queryset    
 
+class RatingViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.RatingSerializer
+    
+    def get_queryset(self):  #Filter ratings so user sees only his own rating.
+        if self.request.user.is_staff:
+            queryset = models.Rating.objects.all()
+        
+        else:
+            queryset = models.Rating.objects.filter(who_rated = self.request.user.id)
+        
+        return queryset        
     
     
         

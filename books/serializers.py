@@ -68,3 +68,11 @@ class BorrowedSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Borrowed
         fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
+
+class RatingSerializer(serializers.ModelSerializer):
+    who_rated = serializers.PrimaryKeyRelatedField(source = 'who_rated.username',
+                                                    queryset = models.Rating.objects.all())
+
+    class Meta:
+        model = models.Rating
+        fields = ('book_rated', 'who_rated', 'rating',)

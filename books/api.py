@@ -9,3 +9,4 @@ router.register('publishers', views.PublisherViewSet, basename = 'PublisherView'
 router.register('genres', views.GenreViewSet, basename = 'GenreView')
 router.register('books', views.BookViewSet, basename = 'BookView')
 router.register('borrowed', views.BorrowedViewSet, basename = 'BorrowedView')
+router.register('rating', views.RatingViewSet, basename = 'RatingView')
