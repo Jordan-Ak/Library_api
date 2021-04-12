@@ -1,6 +1,8 @@
 from rest_framework import viewsets, mixins
 from django.contrib.auth import get_user_model
 from rest_framework import permissions
+from rest_framework import filters
+from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter
 from . import models
 from . import serializers
 from .permissions import IsAdminOrReadOnly
@@ -19,6 +21,10 @@ class UserViewSet(#mixins.CreateModelMixin,   #No post method but the rest are a
     #Project-level permissions apply here, authenticated only
     serializer_class = serializers.UserSerializer
     lookup_field = 'username'
+
+    filter_fields = ('username', 'email', 'date_joined',)
+    search_fields = ('^username', '^email')
+    ordering_fields = ('username', 'email', 'date_joined')
 
     def get_queryset(self): #Query set filters according to being a staff, staff gets all users.
                             #User gets only himself
@@ -39,12 +45,20 @@ class AuthorViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.AuthorListSerializer,}
     permission_classes = [IsAdminOrReadOnly,permissions.IsAuthenticated,]
 
+    filter_fields = ('name',)
+    search_fields = ('^name')
+    ordering_fields = ('name',)
+    
 class PublisherViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     queryset = models.Publisher.objects.all()
     serializer_class = serializers.PublisherDetailSerializer
     serializer_action_classes = {'list': serializers.PublisherListSerializer,}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
+
+    filter_fields = ('name',)
+    search_fields = ('^name')
+    ordering_fields = ('name',)
 
 class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
@@ -53,6 +67,10 @@ class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.GenreListSerializer,}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
+    filter_fields = ('name',)
+    search_fields = ('^name')
+    ordering_fields = ('name',)
+
 class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     queryset = models.Book.objects.all()
@@ -60,9 +78,16 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.BookListSerializer}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
+    filter_fields =  ('name','authors','rating','genre')
+    search_fields = ('name','authors','rating', 'genre')
+    ordering_fields = ('name','authors','rating', 'genre')
+
 class BorrowedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BorrowedSerializer
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
+    filter_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
+    search_fields = ('who_borrowed','name','borrowed_date','returned_date',)
+    ordering_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
 
     def get_queryset(self): #Query set filters according to being a staff, staff gets all users.
                             #User gets only himself

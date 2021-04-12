@@ -71,7 +71,9 @@ class BorrowedSerializer(serializers.ModelSerializer):
 
 class RatingSerializer(serializers.ModelSerializer):
     who_rated = serializers.PrimaryKeyRelatedField(source = 'who_rated.username',
-                                                    queryset = models.Rating.objects.all())
+                                                    queryset = get_user_model().objects.all())
+    book_rated = serializers.PrimaryKeyRelatedField(source = 'book_rated.name',
+                                                     queryset = models.Book.objects.all())
 
     class Meta:
         model = models.Rating

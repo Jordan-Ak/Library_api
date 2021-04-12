@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     #Third pary package for password reset, sending to emails
     'django_rest_passwordreset', # To provide password reset endpoints
 
+    #Enabling filter capabilities in browsable api
+    'django_filters',
 
 
     #My apps
@@ -163,6 +165,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
         'books.custompagination.LimitOffsetPaginationWithUpperBound',
         'PAGE_SIZE': results_return_per_page,
+    
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+        'rest_framework.filters.SearchFilter',
+        ),
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #Sending emails to the console
