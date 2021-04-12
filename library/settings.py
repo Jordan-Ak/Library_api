@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from environs import Env
+from books.ad_variables import results_return_per_page
 
 env = Env()
 env.read_env()
@@ -159,6 +160,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+        'PAGE_SIZE': results_return_per_page,
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #Sending emails to the console
