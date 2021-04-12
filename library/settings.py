@@ -161,7 +161,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_PAGINATION_CLASS':
-        'rest_framework.pagination.LimitOffsetPagination',
+        'books.custompagination.LimitOffsetPaginationWithUpperBound',
         'PAGE_SIZE': results_return_per_page,
 }
 
