@@ -1,7 +1,8 @@
 from rest_framework import viewsets, mixins
+from rest_framework import filters
 from django.contrib.auth import get_user_model
 from rest_framework import permissions
-from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter
 from . import models
 from . import serializers
@@ -45,10 +46,12 @@ class AuthorViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.AuthorListSerializer,}
     permission_classes = [IsAdminOrReadOnly,permissions.IsAuthenticated,]
 
-    filter_fields = ('name',) #Only ordering field works well
-    search_fields = ('^name')
+     #Both filters work well
+    search_fields = ['^name']
     ordering_fields = ('name',)
-    
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
+
+
 class PublisherViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     queryset = models.Publisher.objects.all()
@@ -56,9 +59,10 @@ class PublisherViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.PublisherListSerializer,}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-    filter_fields = ('name',) #Only order field works well
-    search_fields = ('^name')
+     #Both filters work well
+    search_fields = ['^name']
     ordering_fields = ('name',)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)   
 
 class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
@@ -67,9 +71,10 @@ class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.GenreListSerializer,}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-    filter_fields = ('name',) #Only order field works
-    search_fields = ('^name')
+    #Both filters work well
+    search_fields = ['^name']
     ordering_fields = ('name',)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
 
 class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
@@ -78,16 +83,18 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.BookListSerializer}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-    filter_fields =  ('name','authors__name','rating','genre') #Filter doesn't work well especially ratings
-    search_fields = ['name','authors__name','rating', 'genre',] #Use double underscore notation to filter
-    ordering_fields = ('name','authors__name','rating', 'genre') #Search has a big problem
+    filter_fields =  ('genre__name',) #Filter doesn't work well especially ratings
+    search_fields = ['name','authors__name',] #Its calm except preceding comment
+    ordering_fields = ('name','authors__name','rating', 'genre__name') 
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend,)
 
 class BorrowedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BorrowedSerializer
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
-    filter_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',) #Search has issues
-    search_fields = ('who_borrowed','name','borrowed_date','returned_date',)
-    ordering_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
+    filter_fields = ('has_returned','borrowed_date','returned_date',) #Everythings calm
+    search_fields = ('^who_borrowed__username','^name__name',)
+    ordering_fields = ('who_borrowed__username','name__name','has_returned','borrowed_date','returned_date',)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend,)
 
     def get_queryset(self): #Query set filters according to being a staff, staff gets all users.
                             #User gets only himself
@@ -103,10 +110,10 @@ class BorrowedViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.RatingSerializer
     
-    filter_fields = ('book_rated', 'rating', 'who_rated',) #Search has issues
-    search_fields = ('book_rated','who_rated',)
-    ordering_fields = ('book_rated', 'rating', 'who_rated',)
-
+    filter_fields = ('rating',) #Everything's calm
+    search_fields = ('book_rated__name','who_rated__username',)
+    ordering_fields = ('book_rated__name', 'rating', 'who_rated__username',)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
 
     def get_queryset(self):  #Filter ratings so user sees only his own rating.
         if self.request.user.is_staff:
