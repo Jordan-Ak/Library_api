@@ -84,7 +84,7 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
     filter_fields =  ('genre__name',) #Filter doesn't work well especially ratings
-    search_fields = ['name','authors__name',] #Its calm except preceding comment
+    search_fields = ['^name','^authors__name',] #Its calm except preceding comment
     ordering_fields = ('name','authors__name','rating', 'genre__name') 
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend,)
 
@@ -111,7 +111,7 @@ class RatingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.RatingSerializer
     
     filter_fields = ('rating',) #Everything's calm
-    search_fields = ('book_rated__name','who_rated__username',)
+    search_fields = ('^book_rated__name','^who_rated__username',)
     ordering_fields = ('book_rated__name', 'rating', 'who_rated__username',)
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
 
