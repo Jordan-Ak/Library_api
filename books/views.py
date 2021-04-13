@@ -22,9 +22,9 @@ class UserViewSet(#mixins.CreateModelMixin,   #No post method but the rest are a
     serializer_class = serializers.UserSerializer
     lookup_field = 'username'
 
-    filter_fields = ('username', 'email', 'date_joined',)
-    search_fields = ('^username', '^email')
-    ordering_fields = ('username', 'email', 'date_joined')
+    filter_fields = ('username', 'email', 'date_joined',)  #Bugs to fix filter doesn't work well
+    search_fields = ('^username', '^email')                #Search is okay
+    ordering_fields = ('username', 'email', 'date_joined')  # Ordering fields is okay
 
     def get_queryset(self): #Query set filters according to being a staff, staff gets all users.
                             #User gets only himself
@@ -45,7 +45,7 @@ class AuthorViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.AuthorListSerializer,}
     permission_classes = [IsAdminOrReadOnly,permissions.IsAuthenticated,]
 
-    filter_fields = ('name',)
+    filter_fields = ('name',) #Only ordering field works well
     search_fields = ('^name')
     ordering_fields = ('name',)
     
@@ -56,7 +56,7 @@ class PublisherViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.PublisherListSerializer,}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-    filter_fields = ('name',)
+    filter_fields = ('name',) #Only order field works well
     search_fields = ('^name')
     ordering_fields = ('name',)
 
@@ -67,7 +67,7 @@ class GenreViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.GenreListSerializer,}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-    filter_fields = ('name',)
+    filter_fields = ('name',) #Only order field works
     search_fields = ('^name')
     ordering_fields = ('name',)
 
@@ -78,14 +78,14 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     serializer_action_classes = {'list': serializers.BookListSerializer}
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
 
-    filter_fields =  ('name','authors','rating','genre')
-    search_fields = ('name','authors','rating', 'genre')
-    ordering_fields = ('name','authors','rating', 'genre')
+    filter_fields =  ('name','authors__name','rating','genre') #Filter doesn't work well especially ratings
+    search_fields = ['name','authors__name','rating', 'genre',] #Use double underscore notation to filter
+    ordering_fields = ('name','authors__name','rating', 'genre') #Search has a big problem
 
 class BorrowedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BorrowedSerializer
     permission_classes = [IsAdminOrReadOnly, permissions.IsAuthenticated,]
-    filter_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
+    filter_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',) #Search has issues
     search_fields = ('who_borrowed','name','borrowed_date','returned_date',)
     ordering_fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
 
@@ -103,6 +103,11 @@ class BorrowedViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.RatingSerializer
     
+    filter_fields = ('book_rated', 'rating', 'who_rated',) #Search has issues
+    search_fields = ('book_rated','who_rated',)
+    ordering_fields = ('book_rated', 'rating', 'who_rated',)
+
+
     def get_queryset(self):  #Filter ratings so user sees only his own rating.
         if self.request.user.is_staff:
             queryset = models.Rating.objects.all()
@@ -115,7 +120,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 class QuantityTimeViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.QuantityBorrowedSerializer
 
-    def get_queryset(self):  #Filter ratings so user sees only his own rating.
+    def get_queryset(self):  #Filter query set so user sees only what he borrowed unless admin user
         if self.request.user.is_staff:
             queryset = models.Quantity_Borrowed.objects.all()
         

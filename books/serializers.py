@@ -43,8 +43,10 @@ class GenreDetailSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
-    genre = serializers.StringRelatedField(many = True,)
+    authors = serializers.SlugRelatedField(many = True,
+                                                queryset = models.Author.objects.all(), slug_field = 'name',) #To represent the relationship as a string instead of id
+    genre = serializers.SlugRelatedField(many = True,
+                                                 queryset = models.Genre.objects.all(),slug_field = 'name')
    
    
     class Meta:
@@ -52,7 +54,9 @@ class BookListSerializer(serializers.ModelSerializer):
         fields = ('name','authors','rating', 'genre')
 
 class BookDetailSerializer(serializers.ModelSerializer):
-    publisher = serializers.ReadOnlyField(source = 'publisher.name') #To display publisher name instead of id
+    publisher = serializers.PrimaryKeyRelatedField(
+                queryset = models.Publisher.objects.all(),source = 'publisher.name') #To display publisher name instead of id
+    
     authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
     genre = serializers.StringRelatedField(many = True,)
 
@@ -63,8 +67,11 @@ class BookDetailSerializer(serializers.ModelSerializer):
                   'pub_date','isbn','price',)
 
 class BorrowedSerializer(serializers.ModelSerializer):
-    who_borrowed = serializers.ReadOnlyField(source = 'who_borrowed.username')
-    
+    who_borrowed = serializers.PrimaryKeyRelatedField(queryset = get_user_model().objects.all()
+    ,source = 'who_borrowed.username')
+    name = serializers.PrimaryKeyRelatedField(queryset = models.Book.objects.all(),
+                                             source = 'name.name')
+
     class Meta:
         model = models.Borrowed
         fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
