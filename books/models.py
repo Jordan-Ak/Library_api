@@ -79,7 +79,7 @@ class Book(models.Model):
 
 class Borrowed(models.Model):    #Model for users borrowing and returning
     name = models.ForeignKey(Book, on_delete = models.CASCADE,) #Consider making one to many field
-    borrowed_date = models.DateTimeField(auto_now_add = True)   #Date is created as soon as instance is created
+    borrowed_date = models.DateTimeField(auto_now_add = True,)   #Date is created as soon as instance is created
     has_returned = models.BooleanField(default = False)    #Field that determines if a model is returend or not
     returned_date = models.DateTimeField(null = True, blank = True,)    #Date that changes as soon as book is returned
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')

@@ -16,7 +16,7 @@ def modify_has_returned_date(sender, instance, **kwargs):
         pass
     else:
         if current.has_returned != previous.has_returned:
-            instance.returned_date = timezone.now()
+            instance.returned_date = datetime.now()
 
 @receiver(pre_save, sender = Borrowed,) #Signal that constraints a user not to borrow multiple copies of the same book
 def same_borrowed(sender, instance, *args, **kwargs):

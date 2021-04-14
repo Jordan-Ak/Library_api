@@ -140,6 +140,8 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/London'
 
+DATE_TIME_FORMAT = "%H:%M, %d-%m-%Y"
+
 USE_I18N = True
 
 USE_L10N = True
