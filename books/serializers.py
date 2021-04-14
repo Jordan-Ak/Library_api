@@ -86,25 +86,13 @@ class BorrowedSerializer(serializers.ModelSerializer):
             representation['returned_date'] = instance.returned_date.strftime("%H:%M, %d-%m-%Y")
         except AttributeError:
             return representation
-            
+
         return representation
 
-    """   def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.context['request'].method == 'GET':
-            self.fields['who_borrowed'].source = "who_borrowed.username"
-            self.fields['name'].source = "name.name"
-        
-    def create(self,validated_data):
-        obj = models.Borrowed.objects.create(**validated_data)
-        
-        return obj
-
-"""
 class RatingSerializer(serializers.ModelSerializer):
-    who_rated = serializers.PrimaryKeyRelatedField(source = 'who_rated.username',
+    who_rated = serializers.SlugRelatedField(slug_field = 'username',
                                                     queryset = get_user_model().objects.all())
-    book_rated = serializers.PrimaryKeyRelatedField(source = 'book_rated.name',
+    book_rated = serializers.SlugRelatedField(slug_field = 'name',
                                                      queryset = models.Book.objects.all())
 
     class Meta:
