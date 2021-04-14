@@ -14,3 +14,4 @@ rating_number_max = 5
 
 results_return_per_page = 4
 pagination_max_limit = 10
+num_books_allowed = 3

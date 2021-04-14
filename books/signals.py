@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.db.models import IntegerField
 from django.db.models import F
 from .models import Borrowed, Quantity_Borrowed, Quantity_Book
-from .ad_variables import days_to_return
+from .ad_variables import days_to_return, num_books_allowed
 
 @receiver(pre_save, sender= Borrowed,)    #Signal for modifying returned date when user returns book
 def modify_has_returned_date(sender, instance, **kwargs):
@@ -37,8 +37,8 @@ def num_borrowed(sender, instance, *args, **kwargs):
                             has_returned = False).exclude(id = current.id)
     num_borrowed = len(borrowed_person)
     
-    if num_borrowed == 3 and current.has_returned == False:
-        raise Exception("Current user cannot borrow more than 3 books!")
+    if num_borrowed == num_books_allowed and current.has_returned == False:
+        raise Exception(f"Current user cannot borrow more than {num_books_allowed} books!")
 
 @receiver(pre_save, sender = Borrowed,)    #A signal that signals if a book is out of stock at the moment.
 def finished_book(sender, instance, *args, **kwargs):
