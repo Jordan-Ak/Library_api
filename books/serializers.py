@@ -44,8 +44,7 @@ class GenreDetailSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    authors = serializers.SlugRelatedField(many = True,
-                                                queryset = models.Author.objects.all(), slug_field = 'name',) #To represent the relationship as a string instead of id
+    authors = AuthorListSerializer(many = True,) #To represent the relationship as a string instead of id
     genre = serializers.SlugRelatedField(many = True,
                                                  queryset = models.Genre.objects.all(),slug_field = 'name')
     
