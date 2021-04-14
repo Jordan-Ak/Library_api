@@ -55,8 +55,8 @@ class BookListSerializer(serializers.ModelSerializer):
         fields = ('name','authors','rating', 'genre')
 
 class BookDetailSerializer(serializers.ModelSerializer):
-    publisher = serializers.PrimaryKeyRelatedField(
-                queryset = models.Publisher.objects.all(),source = 'publisher.name') #To display publisher name instead of id
+    publisher = serializers.SlugRelatedField(
+                queryset = models.Publisher.objects.all(), slug_field= 'name') #To display publisher name instead of id
     
     authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
     genre = serializers.StringRelatedField(many = True,)
@@ -100,7 +100,9 @@ class RatingSerializer(serializers.ModelSerializer):
         fields = ('book_rated', 'who_rated', 'rating',)
 
 class QuantityBorrowedSerializer(serializers.ModelSerializer):
-
+    who = serializers.SlugRelatedField(slug_field = 'username',
+                                 queryset = get_user_model().objects.all())
+    
     class Meta:
         model = models.Quantity_Borrowed
-        fields = ('books_borrowed_and_time_left','quantity_borrowed',)
+        fields = ('who','books_borrowed','time_left','quantity_borrowed',)

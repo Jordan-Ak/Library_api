@@ -133,13 +133,20 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
             
             format_time = convert_timedelta(time_format)
             left_time.append(format_time)
-        return left_time
+        return ',  '.join(map(str,left_time))
     
     @property #This code is to generate the books which have been borrowed to link with time_left
     def books_borrowed(self):
+        borrowed_books = []
         borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
-        return borrowed_person
+        for i in borrowed_person:
+            borrowed_books.append(i.name)
+        
+        return ',  '.join(map(str,borrowed_books))
     
+    """
+   !!!!!Reason I am commenting it out is because I feel it's better decoupled in the api than together
+   
     @property #This is code to determine which books this user borrowed and time left for return
     def books_borrowed_and_time_left(self):
         borrowed_person = self.books_borrowed
@@ -156,7 +163,7 @@ class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
         
         return ',  '.join(map(str,display)) #'Display values in list in readable format'
                 #', \n'.join(map(str,display)) #To add a new line in admin
-
+"""
     @property #This is code to determine how many books that has been borrowed by a user
     def quantity_borrowed(self):
         borrowed_person = Borrowed.objects.filter(who_borrowed = self.who).filter(has_returned = False)
