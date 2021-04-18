@@ -119,7 +119,7 @@ class Quantity_Book(models.Model):     #Quantity of books for a particular book
         return self.book.name.title()
 
 class Quantity_Borrowed(models.Model):    #Amount a user has borrowed
-    who = models.ForeignKey(get_user_model(), on_delete = models.CASCADE,)
+    who = models.OneToOneField(get_user_model(), on_delete = models.CASCADE,)
 
     
     @property  #This code is to generate the time left for books borrowed

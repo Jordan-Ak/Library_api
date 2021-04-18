@@ -86,7 +86,32 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     filter_fields =  ('genre__name',) #Filter doesn't work well especially ratings
     search_fields = ['^name','^authors__name',] #Its calm except preceding comment
     ordering_fields = ('name','authors__name','rating', 'genre__name') 
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend,)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend,) 
+
+    def create(self,request, *args, **kwargs):
+        data = request.data
+
+        new_book = models.Book.objects.create(name = data["name"],
+                                            pub_date = data["pub_date"],
+                                            price = data["price"],
+                                            isbn = data['isbn'],)
+        new_book.save()
+
+        for pub in data['publisher']:
+            pub_obj = models.Publisher.objects.get(name = pub['name'])
+            new_book.publisher.add(pub_obj)
+        
+        for author in data['authors']:
+            author_obj = models.Author.objects.get(name = author['name'])
+            new_book.authors.add(author_obj)
+
+        for gen in data['genre']:
+            gen_obj = models.Genre.objects.get(name = gen['name'])
+            new_book.genre.add(gen_obj)
+
+        serializer = BookListSerializer(new_book)
+        
+        return Response(serializer.data)
 
 class BorrowedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BorrowedSerializer

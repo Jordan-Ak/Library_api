@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 from django.contrib.auth import get_user_model
 from books import models
 
@@ -52,6 +53,7 @@ class BookListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book
         fields = ('name','authors','rating', 'genre')
+
 
 class BookDetailSerializer(serializers.ModelSerializer):
     publisher = serializers.SlugRelatedField(
