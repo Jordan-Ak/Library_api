@@ -45,28 +45,29 @@ class GenreDetailSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    authors = AuthorListSerializer(many = True,) #To represent the relationship as a string instead of id
-    genre = serializers.SlugRelatedField(many = True,
-                                                 queryset = models.Genre.objects.all(),slug_field = 'name')
+    #authors = AuthorListSerializer(many = True,) #To represent the relationship as a string instead of id
+    #genre = serializers.SlugRelatedField(many = True,
+     #                                            queryset = models.Genre.objects.all(),slug_field = 'name')
     
    
     class Meta:
         model = models.Book
         fields = ('name','authors','rating', 'genre')
-
+        depth = 1
 
 class BookDetailSerializer(serializers.ModelSerializer):
-    publisher = serializers.SlugRelatedField(
-                queryset = models.Publisher.objects.all(), slug_field= 'name') #To display publisher name instead of id
+    #publisher = serializers.SlugRelatedField(
+     #           queryset = models.Publisher.objects.all(), slug_field= 'name') #To display publisher name instead of id
     
-    authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
-    genre = serializers.StringRelatedField(many = True,)
+    #authors = serializers.StringRelatedField(many = True,) #To represent the relationship as a string instead of id
+    #genre = serializers.StringRelatedField(many = True,)
 
     class Meta:
         model = models.Book
         fields = ('name', 'authors', 'rating','genre',
                   'publisher', 'total_qty', 'avail_qty',
                   'pub_date','isbn','price',)
+        depth = 1
 
 class BorrowedSerializer(serializers.ModelSerializer):
     who_borrowed = serializers.SlugRelatedField(queryset = get_user_model().objects.all(),

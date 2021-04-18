@@ -1,5 +1,6 @@
 from rest_framework import viewsets, mixins
 from rest_framework import filters
+from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework import permissions
 from django_filters.rest_framework import DjangoFilterBackend
@@ -88,18 +89,15 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     ordering_fields = ('name','authors__name','rating', 'genre__name') 
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend,) 
 
+
     def create(self,request, *args, **kwargs):
         data = request.data
 
-        new_book = models.Book.objects.create(name = data["name"],
+        new_book = models.Book.objects.create(name = data["name"], publisher = models.Publisher.objects.get(id = data["publisher"]),
                                             pub_date = data["pub_date"],
                                             price = data["price"],
                                             isbn = data['isbn'],)
         new_book.save()
-
-        for pub in data['publisher']:
-            pub_obj = models.Publisher.objects.get(name = pub['name'])
-            new_book.publisher.add(pub_obj)
         
         for author in data['authors']:
             author_obj = models.Author.objects.get(name = author['name'])
@@ -109,7 +107,7 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
             gen_obj = models.Genre.objects.get(name = gen['name'])
             new_book.genre.add(gen_obj)
 
-        serializer = BookListSerializer(new_book)
+        serializer = serializers.BookListSerializer(new_book)
         
         return Response(serializer.data)
 
