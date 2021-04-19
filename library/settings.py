@@ -60,7 +60,7 @@ INSTALLED_APPS = [
 
     #Enabling filter capabilities in browsable api
     'django_filters',
-
+    'django_property_filter',
 
     #My apps
     'users', #app for managing user models or accounts

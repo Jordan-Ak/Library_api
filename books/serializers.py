@@ -52,7 +52,9 @@ class BookListSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = models.Book
-        fields = ('name','authors','rating', 'genre')
+        fields = ('name', 'authors', 'rating','genre',
+                  'publisher', 'total_qty', 'avail_qty',
+                  'pub_date','isbn','price',)
         depth = 1
 
 class BookDetailSerializer(serializers.ModelSerializer):
@@ -82,7 +84,7 @@ class BorrowedSerializer(serializers.ModelSerializer):
         model = models.Borrowed
         fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
 
-    def to_representation(self, instance):
+    def to_representation(self, instance):  #This defines how returned date is to be displayed, if value is null display default
         representation = super(BorrowedSerializer, self).to_representation(instance)
         try:
             representation['returned_date'] = instance.returned_date.strftime("%H:%M, %d-%m-%Y")
