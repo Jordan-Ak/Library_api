@@ -83,7 +83,27 @@ class Borrowed(models.Model):    #Model for users borrowing and returning
     has_returned = models.BooleanField(default = False)    #Field that determines if a model is returend or not
     returned_date = models.DateTimeField(null = True, blank = True,)    #Date that changes as soon as book is returned
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')
-               
+    
+    @property
+    def overdue(self):
+        borrowed_time = Borrowed.objects.filter(
+                        who_borrowed = self.who_borrowed).filter(
+                        has_returned = False).filter(name = self.name)
+        seconds_remaining = 0
+        
+        for time in borrowed_time: #Making a list of time left to return books
+            time_format = ((time.borrowed_date + timedelta(
+                                    days =days_to_return) - datetime.now(timezone.utc)))
+            seconds_remaining = time_format.days*24*60*60+time_format.seconds
+            
+        
+        if seconds_remaining < 0:
+            return True
+
+        elif seconds_remaining > 0:
+            return False                
+
+
     class Meta:
         verbose_name_plural = 'Borrowed' #Name for plural object that displays in admin
         

@@ -19,7 +19,7 @@ class GenreAdmin(admin.ModelAdmin):
 
 class DateAdmin(admin.ModelAdmin):
     model = Borrowed
-    readonly_fields = ('borrowed_date','returned_date')
+    readonly_fields = ('borrowed_date','returned_date', 'overdue')
 
 class RateAdmin(admin.ModelAdmin):
     model = Book

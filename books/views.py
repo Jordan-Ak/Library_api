@@ -7,7 +7,7 @@ from rest_framework import permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter,CharFilter, BooleanFilter
 from django_property_filter import (PropertyNumberFilter, PropertyCharFilter, 
-                                    PropertyFilterSet,PropertyDurationFilter)
+                                    PropertyFilterSet,PropertyBooleanFilter)
 from . import models
 from . import serializers
 from .permissions import IsAdminOrReadOnly
@@ -166,7 +166,7 @@ class BookViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         
         return Response(serializer.data)
 
-class BorrowedFilter(FilterSet):
+class BorrowedFilter(PropertyFilterSet):
     from_borrowed_date = DateTimeFilter(field_name = 'borrowed_date', lookup_expr ='gte',)
     to_borrowed_date = DateTimeFilter(field_name = 'borrowed_date', lookup_expr = 'lte',)
     from_returned_date = DateTimeFilter(field_name = 'returned_date', lookup_expr = 'gte',)
@@ -174,11 +174,12 @@ class BorrowedFilter(FilterSet):
     has_returned = BooleanFilter(field_name = 'has_returned',)
     book_name = CharFilter(field_name = 'name__name', lookup_expr = 'icontains',label = 'book name')
     who_borrowed = CharFilter(field_name = 'who_borrowed__username', lookup_expr = 'icontains',)
-    
+    overdue = PropertyBooleanFilter(field_name = 'overdue')
+
     class Meta:
         model = models.Borrowed
         fields = ('from_borrowed_date','to_borrowed_date', 'from_returned_date',
-                 'to_returned_date','has_returned','book_name','who_borrowed',)
+                 'to_returned_date','has_returned','book_name','who_borrowed','overdue',)
 
 class BorrowedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BorrowedSerializer
@@ -227,7 +228,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 
 class QuantityBFilter(PropertyFilterSet):
     who_ = CharFilter(field_name = 'who__username', lookup_expr = 'icontains',)
-    time_left = PropertyDurationFilter(field_name = 'time_left',lookup_expr = 'gte',)
+    time_left = PropertyCharFilter(field_name = 'time_left',lookup_expr = 'icontains',)
     books_borrowed = PropertyCharFilter(field_name = 'books_borrowed',lookup_expr = 'icontains',)
     quantity_borrowed = PropertyNumberFilter(field_name = 'quantity_borrowed', lookup_expr = 'gte',)
     class Meta:

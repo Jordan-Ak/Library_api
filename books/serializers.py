@@ -82,7 +82,7 @@ class BorrowedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Borrowed
-        fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date',)
+        fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date','overdue',)
 
     def to_representation(self, instance):  #This defines how returned date is to be displayed, if value is null display default
         representation = super(BorrowedSerializer, self).to_representation(instance)
