@@ -198,7 +198,11 @@ class BorrowedViewSet(viewsets.ModelViewSet):
         else:
             queryset = models.Borrowed.objects.filter(who_borrowed = self.request.user.id)
         
-        return queryset    
+        return queryset   
+
+    def perform_create(self, serializer):
+        serializer.save(who_issued = self.request.user)
+
 
 class RatingFilter(FilterSet):
     rating = NumberFilter(field_name = 'rating', lookup_expr = 'exact',)
@@ -225,6 +229,8 @@ class RatingViewSet(viewsets.ModelViewSet):
         
         return queryset 
 
+    def perform_create(self, serializer): #To save the user who made the save not someone else
+        serializer.save(who_rated = self.request.user)
 
 class QuantityBFilter(PropertyFilterSet):
     who_ = CharFilter(field_name = 'who__username', lookup_expr = 'icontains',)

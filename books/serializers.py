@@ -74,15 +74,18 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class BorrowedSerializer(serializers.ModelSerializer):
     who_borrowed = serializers.SlugRelatedField(queryset = get_user_model().objects.all(),
                                                 slug_field = 'username')
+    who_issued = serializers.SlugRelatedField(slug_field = 'username', read_only = True)
+    
     name = serializers.SlugRelatedField(queryset = models.Book.objects.all(),
                                              slug_field = 'name')
 
     borrowed_date = serializers.DateTimeField(format = "%H:%M, %d-%m-%Y", read_only = True)
     #returned_date = serializers.DateTimeField(format = "%H:%M, %d-%m-%Y", )
-
+    
     class Meta:
         model = models.Borrowed
-        fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date','overdue',)
+        fields = ('who_borrowed','name','has_returned','borrowed_date','returned_date','overdue',
+                  'who_issued',)
 
     def to_representation(self, instance):  #This defines how returned date is to be displayed, if value is null display default
         representation = super(BorrowedSerializer, self).to_representation(instance)
@@ -95,7 +98,7 @@ class BorrowedSerializer(serializers.ModelSerializer):
 
 class RatingSerializer(serializers.ModelSerializer):
     who_rated = serializers.SlugRelatedField(slug_field = 'username',
-                                                    queryset = get_user_model().objects.all())
+                                                    read_only = True,)
     book_rated = serializers.SlugRelatedField(slug_field = 'name',
                                                      queryset = models.Book.objects.all())
 

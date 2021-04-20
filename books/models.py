@@ -83,7 +83,9 @@ class Borrowed(models.Model):    #Model for users borrowing and returning
     has_returned = models.BooleanField(default = False)    #Field that determines if a model is returend or not
     returned_date = models.DateTimeField(null = True, blank = True,)    #Date that changes as soon as book is returned
     who_borrowed = models.ForeignKey(get_user_model(), on_delete = models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55')
-    
+    who_issued = models.ForeignKey(get_user_model(), on_delete= models.SET_DEFAULT, default ='9c495b90-3900-43d1-875d-6b15d5d5ab55',
+                                    related_name = 'who_issued')
+
     @property
     def overdue(self):
         borrowed_time = Borrowed.objects.filter(

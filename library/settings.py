@@ -186,10 +186,10 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False #Automatically logs users after confirming e-mail.
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/dj-rest-auth/login'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/api/v1/login'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 LOGIN_REDIRECT_URL='/'
-LOGIN_URL = 'http://localhost:8000/dj-rest-auth/login'
+LOGIN_URL = 'http://localhost:8000/api/v1/login'
 
 SITE_ID = 1
