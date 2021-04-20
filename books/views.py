@@ -203,6 +203,10 @@ class BorrowedViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(who_issued = self.request.user)
 
+class QuantityBookViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.QuantityBookSerializer
+    queryset = models.Quantity_Book.objects.all()
+    permission_classes = [permissions.IsAdminUser,]
 
 class RatingFilter(FilterSet):
     rating = NumberFilter(field_name = 'rating', lookup_expr = 'exact',)

@@ -96,6 +96,13 @@ class BorrowedSerializer(serializers.ModelSerializer):
 
         return representation
 
+class QuantityBookSerializer(serializers.ModelSerializer):
+    book = serializers.SlugRelatedField(slug_field = 'name', queryset = models.Book.objects.all(),)
+
+    class Meta:
+        model = models.Quantity_Book
+        fields = ('book','total_qty','avail_qty',)
+
 class RatingSerializer(serializers.ModelSerializer):
     who_rated = serializers.SlugRelatedField(slug_field = 'username',
                                                     read_only = True,)
