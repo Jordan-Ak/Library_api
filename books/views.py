@@ -203,10 +203,24 @@ class BorrowedViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(who_issued = self.request.user)
 
+class QuantityFilter(PropertyFilterSet):
+    book = CharFilter(field_name = 'book', lookup_expr = 'icontains',)
+    total_qty = NumberFilter(field_name = 'total_qty', lookup_expr = 'gte',)
+    avail_qty = PropertyNumberFilter(field_name = 'avail_qty', lookup_expr = 'gte')
+    
+    class Meta:
+        model = models.Quantity_Book
+        fields = ('book', 'total_qty', 'avail_qty',)
+
 class QuantityBookViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.QuantityBookSerializer
     queryset = models.Quantity_Book.objects.all()
     permission_classes = [permissions.IsAdminUser,]
+
+    filter_class = QuantityFilter
+    search_fields = ('^book__name',)
+    ordering_fields = ('book__name', 'total_qty', 'avail_qty',)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
 
 class RatingFilter(FilterSet):
     rating = NumberFilter(field_name = 'rating', lookup_expr = 'exact',)
