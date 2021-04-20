@@ -62,6 +62,9 @@ INSTALLED_APPS = [
     'django_filters',
     'django_property_filter',
 
+    #For automated documentation
+    'drf_yasg',
+
     #My apps
     'users', #app for managing user models or accounts
     'books', #app for books
